@@ -1,0 +1,23 @@
+{
+    "name": "MovieLens",
+    "version": "0.1",
+    "icons": { 
+        "16": "/img/icons/icon_16.png",
+        "48": "/img/icons/icon_48.png",
+        "128": "/img/icons/icon_128.png" 
+    },
+
+    "description": "MovieLens ratings",
+    
+    "content_scripts": [
+        {
+            "matches": ["*://*.viaplay.dk/*", "*://*.netflix.com/*"],
+            "js": [
+                    "/js/external/jquery-2.1.3.min.js", 
+                    "/js/content_script.js"
+                ]
+        }
+    ],
+
+    "manifest_version": 2
+}
