@@ -11,12 +11,16 @@
 
     "content_scripts": [
         {
-            "matches": [ "*://*.viaplay.dk/*", "*://*.netflix.com/*" ],
+            "matches": [
+                "*://*.viaplay.dk/*",
+                "*://*.netflix.com/*",
+                "*://*.movielens.org/*"
+            ],
             "js": [
                 "/js/external/jquery-2.1.3.min.js",
                 "/js/content_script.js"
             ],
-            "css": ["/css/styles.css"]
+            "css": [ "/css/styles.css" ]
         }
     ],
 
