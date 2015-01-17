@@ -12,6 +12,7 @@ function findTitles() {
 var titlesProcessed = {};
 
 
+
 function findRating(titleString, $element) {
     var title = $.trim(titleString);
     if (!title)
@@ -48,13 +49,7 @@ function findRating(titleString, $element) {
 
             //msg+= " SearchHit:" + result.movie.title + ": " +  prediction + " Rating:" +rating ;
 
-            var item = $element.parent().find(".movielens_item");
-            if (!item.length) {
-                $element.parent().prepend("<span class=\"movielens_item\">init</span> ");
-                item = $element.parent().find(".movielens_item");
-            }
-
-            item.text(prediction + "/" + rating);
+            insertInDom($element, prediction, result.movieUserData.rating);
 
 
             console.log(title, prediction, rating)
@@ -71,29 +66,42 @@ function findRating(titleString, $element) {
     return req;
 }
 
+function insertInDom($element, prediction, rating) {
+    var anchor = $element.closest('.labels > div:first-child');
+    var starsElement = anchor.find(".movielens_stars");
+    if (!starsElement.length) {
+        anchor.append("<div class=\"movielens_box\"><div class=\"movielens_stars\"></div></div> ");
+        starsElement = anchor.find(".movielens_stars");
+    }
+
+    var halfStarCount = Math.round(prediction * 2);
+
+    var isRated = Math.round(rating * 2);
+
+    var starsHtml = "";
+    for (var i = 0; i < 10; i++) {
+
+        var cls;
+        if (i < isRated)
+            cls = 'rating';
+        else
+            cls = i < halfStarCount ? 'prediction' : 'empty';
+
+        var half = i % 2 == 1 ? ' right-half' : '';
+        starsHtml += '<span class="movielens_star ' + cls + half + ' "></span>';
+    }
+
+    starsElement.html(starsHtml);
+}
+
 function refresh() {
     var titles = findTitles();
-    var maxToGet = 10000;
-
     for (var i = 0; i < titles.length; i++) {
 
         var t = titles[i].title;
         var $element = titles[i].element;
 
         var req = findRating(t, $element);
-
-        // req.done(function( response,b,c) {
-        // if(response && response.data && response.data.searchResults && response.data.searchResults.length>0){
-        // var result = response.data.searchResults[0];
-        // if(result){
-        // $element.append("<hr> " + result.movieUserData.prediction + "/" + result.movieUserData.rating);
-        // }
-        // }
-        // });			
-
-
-        if (i == maxToGet)
-            return;
     }
 }
 
@@ -101,17 +109,17 @@ $(function() {
 
     //console.log('init')
     //$( "body" ).prepend( "<input id="movielens_refresh" type=\"button\" value=\"Refresh\" onclick=\"refresh()\" style=\"position: absolute;z-index: 10000;right: 10px;top: 10px;\" />  ");
-    var node = $('<input id="movielens_refresh" type="button" value="Refresh" onclick="refresh()" style="position: absolute;z-index: 10000;right: 10px;top: 10px;"/>  ').click(refresh);
+    var node = $('<input id="movielens_refresh" type="button" value="Refresh" style="position: absolute;z-index: 10000;right: 10px;top: 10px;"/>  ').click(refresh);
     $("body").prepend(node);
 
-    var o = {
+    var credentials = {
         password: "vertica",
         userName: "cth@vertica.dk"
     }
     $.ajax({
             type: "POST",
             url: "https://movielens.org/api/sessions",
-            data: JSON.stringify(o),
+            data: JSON.stringify(credentials),
             contentType: "application/json;charset=UTF-8"
         })
         .done(function(a, b, c) {
@@ -122,8 +130,6 @@ $(function() {
 
         });
 
-
-    localStorage.setItem("acceptCookies", "yes")
 
     $(window).scroll(function() {
         refresh();

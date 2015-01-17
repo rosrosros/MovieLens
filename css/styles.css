@@ -1,0 +1,50 @@
+
+/*Viaplay hacks*/
+
+.labels {
+    height: 84px !important;
+}
+
+
+/*Styling*/
+.movielens_stars {
+    width: 200px;
+}
+
+.movielens_star {
+    display: inline-block;
+    width: 13px;
+    height: 26px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    float: none;
+    background-image: url(https://movielens.org/images/stars-26.png);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 130px 26px;
+}
+
+.movielens_star.rating {
+    background-position: -26px 0;    
+}
+
+.movielens_star.rating.right-half {
+    background-position: -39px 0;  
+}
+
+
+.movielens_star.prediction {
+    background-position: -52px 0;    
+}
+
+.movielens_star.prediction.right-half {
+    background-position: -65px 0;  
+}
+
+    .movielens_star.empty {
+    background-position: 0 0;  
+}
+    .movielens_star.empty.right-half {
+    background-position: -13px 0;  
+}
