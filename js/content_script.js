@@ -7,6 +7,24 @@ var sites = {
     viaplay: "viaplay",
     netflix: "netflix",
 }
+// function init(){
+
+
+//     if(window.jQuery !== undefined){
+        
+//         var ss  =  jQuery.isNumeric(2)
+//         console.log(ss)
+//     }
+//     else{
+//         setTimeout(function(){
+//             init();
+//         },250);
+//     }
+// }
+
+
+// init();
+
 $(function () {
 
    
@@ -129,7 +147,7 @@ function findRating(titleString, $element) {
 
 function findTitles() {
     if (site == sites.viaplay) {
-        return $(".item .line-clamp").map(function () {
+        return $(".item .labels h3 a").map(function () {
             return {
                 title: $(this).text(),
                 element: $(this)
@@ -138,9 +156,9 @@ function findTitles() {
     }
 
     if (site == sites.netflix) {
-        return $(".boxShotImg, .boxart").map(function () {
+        return $(".title_card").map(function () {
             return {
-                title: $(this).attr('alt'),
+                title: $(this).attr('aria-label'),
                 element: $(this)
             };
         }).get();
