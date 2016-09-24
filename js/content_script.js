@@ -72,11 +72,10 @@ function setSite() {
 
 function login() {
 
-    
-    var credentials = {
-        password: "vertica",
-        userName: "cth@vertica.dk"
+    if(!credentials){
+        console.log("credentials missing!")
     }
+    
     $.ajax({
             type: "POST",
             url: "https://movielens.org/api/sessions",
@@ -84,6 +83,7 @@ function login() {
             contentType: "application/json;charset=UTF-8"
         })
         .done(function(a, b, c) {
+            console.log("https://movielens.org/api/sessions", credentials.userName, a)
             refresh();
         });
    
@@ -107,7 +107,24 @@ function refresh() {
 
 
 function sort() {
-    console.log("sorting")
+    var $itemContainer = $('.item-list'),
+    $items = $itemContainer.children('.item');
+
+    $items.sort(function(a,b){
+    //console.log($(a))
+        var an = parseFloat($(a).attr("movielens_rank")),
+            bn = parseFloat($(b).attr("movielens_rank"));
+
+        if(an < bn) {
+            return 1;
+        }
+        if(an > bn) {
+            return -1;
+        }
+        return 0;
+    });
+    $itemContainer.empty();
+    $items.detach().appendTo($itemContainer);
 }
 
 
@@ -144,6 +161,7 @@ function findRating(titleString, $element) {
             insertInDom($element, prediction, result.movieUserData.rating, result.movieId);
             console.log(title, prediction, rating)
         } else {
+            insertInDom($element, 0, 0, 0);
             // no hit
             console.log('! title not found', title);
         }
@@ -202,15 +220,24 @@ function insertInDom($element, prediction, rating, movieId) {
         anchor = $element;
     }
 
+
+    var isRated = Math.round(rating * 2);
+    anchor.attr('movielens_rank', isRated ? rating : prediction);
+
+    anchor.addClass('movielens_anchor');
+    //var sort_value = isRated ? rating : prediction;
+
     var starsElement = anchor.find(".movielens_stars");
     if (!starsElement.length) {
         anchor.append("<div class=\"movielens_box\"><div class=\"movielens_stars\"></div></div> ");
         starsElement = anchor.find(".movielens_stars");
     }
 
+        
+    
     var halfStarCount = Math.round(prediction * 2);
 
-    var isRated = Math.round(rating * 2);
+    
 
     for (var i = 0; i < 10; i++) {
 

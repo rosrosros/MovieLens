@@ -1,4 +1,4 @@
 var credentials = {
         password: "vertica",
-        userName: "ros@vertica.dk"
+        userName: "cth@vertica.dk"
     }
