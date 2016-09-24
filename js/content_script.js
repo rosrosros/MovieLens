@@ -6,6 +6,7 @@ var site;
 var sites = {
     viaplay: "viaplay",
     netflix: "netflix",
+    playpilot:"playpilot"
 }
 // function init(){
 
@@ -28,7 +29,6 @@ var sites = {
 $(function () {
 
    
-
     var errorMsg = setSite();
 
     if (errorMsg) {
@@ -36,8 +36,10 @@ $(function () {
         return;
     }
 
-    var node = $('<input id="movielens_refresh" type="button" value="Refresh" style="position: absolute;z-index: 10000;right: 10px;top: 10px;"/>  ').click(refresh);
+    var node = $('<input id="movielens_refresh" type="button" value="Refresh" style="position: absolute;z-index: 10000;right: 10px;top: 68px;"/>  ').click(refresh);
     $("body").prepend(node);
+    var node2 = $('<input id="movielens_sort" type="button" value="Sort" style="position: absolute;z-index: 10000;right: 100px;top: 68px;"/>  ').click(sort);
+    $("body").prepend(node2);
 
     login();
 
@@ -60,6 +62,10 @@ function setSite() {
         return;
     }
 
+    if (window.location.host.indexOf(sites.playpilot) > -1) {
+        site = sites.playpilot;
+        return;
+    }
     return 'not a supported website: ' + window.location.host
 
 }
@@ -100,6 +106,9 @@ function refresh() {
 
 
 
+function sort() {
+    console.log("sorting")
+}
 
 
 function findRating(titleString, $element) {
@@ -163,6 +172,17 @@ function findTitles() {
             };
         }).get();
     }
+
+    if (site == sites.playpilot) {
+        return $(".item").map(function () {
+            return {
+                title: $(this).find(".primary-title").text(),
+                element: $(this)
+            };
+        }).get();
+    }
+
+    
 }
 
 
@@ -176,6 +196,10 @@ function insertInDom($element, prediction, rating, movieId) {
         anchor = $element.closest('.boxShot');
         if(!anchor.length)
             anchor = $element.closest('.lockup');
+    }
+
+    if (site == sites.playpilot) {
+        anchor = $element;
     }
 
     var starsElement = anchor.find(".movielens_stars");

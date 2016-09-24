@@ -14,11 +14,13 @@
             "matches": [
                 "*://*.viaplay.dk/*",
                 "*://*.netflix.com/*",
+                "*://*.playpilot.com/*",
                 "*://*.movielens.org/*"
             ],
             "js": [
                 "/js/external/jquery-2.2.0.min.js",
-                "/js/content_script.js"
+                "/js/content_script.js",
+                "/js/credentials.js"
             ],
             "css": [ "/css/styles.css" ]
         }
